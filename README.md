@@ -22,39 +22,39 @@ Or install it yourself as:
 
 Declare an Interface
 
-    ```ruby
-    module TestInterface
-      extend InterfaceRegistry::AbstractInterface
-      method_interface :method1
-      method_interface :method2
-    end
+```ruby
+module TestInterface
+    extend InterfaceRegistry::AbstractInterface
+    method_interface :method1
+    method_interface :method2
+end
 
-    # require adapters
-    require 'test_interface/adapter_1'
-    ```
+# require adapters
+require 'test_interface/adapter_1'
+```
 
 Implement an Adapter
 
-    ```ruby
-    # test_interface/adapter_1.rb
-    module TestInterface
-        class Adapter1
-            include TestInterface
+```ruby
+# test_interface/adapter_1.rb
+module TestInterface
+    class Adapter1
+        include TestInterface
 
-            aattr_accessor :attr1
-            aattr_accessor :attr2
+        aattr_accessor :attr1
+        aattr_accessor :attr2
 
-            def method1
-            # do stuff ...
-            end
-
-            def method2
-            # do stuff ...
-            end
-
+        def method1
+        # do stuff ...
         end
+
+        def method2
+        # do stuff ...
+        end
+
     end
-    ```
+end
+```
 
 ## Development
 

@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Simple Abstract Interface.}
   spec.description   = %q{Simple Abstract Interface to create implementation modules}
-  spec.homepage      = "https://sbusso.github.com/interface_registry"
+  spec.homepage      = "https://github.com/sbusso/interface_registry"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
