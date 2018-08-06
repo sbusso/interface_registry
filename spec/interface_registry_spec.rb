@@ -36,6 +36,18 @@ RSpec.describe InterfaceRegistry do
       expect(InterfaceRegistry::Registry.adapters('TestInterface').size).to be(1)
     end
 
+    it "should have registered 1 adatper" do
+      expect(TestInterface.adapters.size).to be(1)
+    end
+
+    it "should have registered 2 methods" do
+      expect(TestInterface.methods.size).to be(2)
+    end
+
+    it "should have registered 2 methods" do
+      expect(InterfaceRegistry::Registry.methods('TestInterface').size).to be(2)
+    end
+
     it "should find 2 methods for TestInterface" do
       expect(InterfaceRegistry::Registry::INTERFACES['TestInterface'][:methods].size).to be(2)
     end

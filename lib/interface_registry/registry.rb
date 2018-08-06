@@ -13,6 +13,12 @@ module InterfaceRegistry
     end
 
     # Return registered adapters for an Interface
+    def self.methods(interface)
+      mod_hash = InterfaceRegistry::Registry::INTERFACES[interface.to_s] || {}
+      mod_hash[:methods] ? mod_hash[:methods] : []
+    end
+
+    # Return registered adapters for an Interface
     def self.adapters(interface)
       mod_hash = InterfaceRegistry::Registry::INTERFACES[interface.to_s] || {}
       mod_hash[:adapters] ? mod_hash[:adapters].keys : []
