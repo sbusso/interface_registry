@@ -20,4 +20,8 @@ class String
     word
   end
 
+  def camelize
+    split("/").map{|s| s.split("_").map(&:capitalize).join }.join('::')
+  end
+
 end

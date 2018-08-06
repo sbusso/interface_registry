@@ -84,5 +84,10 @@ RSpec.describe InterfaceRegistry do
         TestInterface::Adapter1.new.method2
       }.to raise_error(InterfaceRegistry::InterfaceNotImplementedError)
     end
+
+    it "#new should create a new instance of Adapter1" do
+      expect(TestInterface.new('test_interface/adapter1')).to be_kind_of(TestInterface::Adapter1)
+    end
+
   end
 end

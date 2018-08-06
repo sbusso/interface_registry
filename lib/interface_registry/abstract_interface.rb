@@ -57,7 +57,7 @@ module InterfaceRegistry
       #     raise MissingInterface
       #   end
 
-        @adapter = self.const_get("#{adapter_name.to_s.capitalize}")
+        @adapter = self.const_get("#{adapter_name.camelize}")
         @adapter_instance = @adapter.new(config)
       # end
       # @adapter_instance
