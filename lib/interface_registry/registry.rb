@@ -2,6 +2,25 @@ module InterfaceRegistry
   module Registry
     INTERFACES = {}
 
+
+    def self.add_interface(interface)
+
+    end
+
+    def self.add_interface_method(interface, m)
+
+    end
+
+    def self.add_interface_adapter(interface, adapter)
+      INTERFACES[name_to_key(interface)][:adapters][name_to_key(adapter)] = []
+      puts "register adapter #{adapter}"
+    end
+
+    def self.add_adapter_attr(interface, adapter, a)
+      INTERFACES[name_to_key(interface)][:adapters][InterfaceRegistry::AbstractInterface.name_to_key(base)] << name
+      puts "register aattr #{name}"
+    end
+
     # Registered Interfaces
     def self.interfaces
       return @_interfaces if @_interfaces
@@ -36,6 +55,10 @@ module InterfaceRegistry
         end
       end
       return @hooks.freeze
+    end
+
+    def self.name_to_key(klass)
+      klass.name.underscore
     end
   end
 end
