@@ -4,42 +4,41 @@ module InterfaceRegistry
 
 
     def self.add_interface(interface)
-
+      INTERFACES[name_to_key(interface)] = {methods: [], adapters: {}}
     end
 
-    def self.add_interface_method(interface, m)
-
+    def self.add_interface_method(interface, method_name)
+      INTERFACES[name_to_key(interface)][:methods] << method_name
     end
 
     def self.add_interface_adapter(interface, adapter)
       INTERFACES[name_to_key(interface)][:adapters][name_to_key(adapter)] = []
-      puts "register adapter #{adapter}"
     end
 
     def self.add_adapter_attr(interface, adapter, a)
-      INTERFACES[name_to_key(interface)][:adapters][InterfaceRegistry::AbstractInterface.name_to_key(base)] << name
-      puts "register aattr #{name}"
+      INTERFACES[name_to_key(interface)][:adapters][name_to_key(adapter)] << a
     end
 
     # Registered Interfaces
     def self.interfaces
-      return @_interfaces if @_interfaces
-      @_interfaces = {}
-      InterfaceRegistry::Registry::INTERFACES.keys.each do |key|
-        @_interfaces[key] = InterfaceRegistry::Registry::INTERFACES[key][:adapters] unless InterfaceRegistry::Registry::INTERFACES[key][:adapters].empty?
-      end
-      return @_interfaces.freeze
+      INTERFACES
+      # return @_interfaces if @_interfaces
+      # @_interfaces = {}
+      # InterfaceRegistry::Registry::INTERFACES.keys.each do |key|
+      #   @_interfaces[key] = InterfaceRegistry::Registry::INTERFACES[key][:adapters] unless InterfaceRegistry::Registry::INTERFACES[key][:adapters].empty?
+      # end
+      # return @_interfaces
     end
 
     # Return registered adapters for an Interface
     def self.methods(interface)
-      mod_hash = InterfaceRegistry::Registry::INTERFACES[interface.to_s] || {}
+      mod_hash = InterfaceRegistry::Registry::INTERFACES[name_to_key(interface)] || {}
       mod_hash[:methods] ? mod_hash[:methods] : []
     end
 
     # Return registered adapters for an Interface
     def self.adapters(interface)
-      mod_hash = InterfaceRegistry::Registry::INTERFACES[interface.to_s] || {}
+      mod_hash = InterfaceRegistry::Registry::INTERFACES[name_to_key(interface)] || {}
       mod_hash[:adapters] ? mod_hash[:adapters].keys : []
     end
 

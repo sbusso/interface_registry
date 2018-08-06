@@ -7,16 +7,12 @@ module InterfaceRegistry
     # @@lock = Mutex.new
 
     def extended(mod)
-      m = name_to_key(mod)
-      Registry::INTERFACES[m] = {methods: [], adapters: {}}
-      puts "register #{m}"
+      Registry.add_interface(mod)
       mod.define_singleton_method('extended') do |base|
-        Registry::INTERFACES[m][:adapters][name_to_key(base)] = []
-        puts "register interface #{base}"
+        Registry.add_interface_adapter(mod, base)
         base.define_singleton_method('aattr_accessor') do |name|
           base.__send__(:attr_accessor, name)
           Registry::INTERFACES[m][:adapters][name_to_key(base)] << name
-          puts "register aattr #{name}"
         end
       end
       mod.define_singleton_method('included') do |base|
@@ -34,11 +30,11 @@ module InterfaceRegistry
     end
 
     def method_interface(method_name)
-      Registry::INTERFACES[interface_name][:methods] << method_name
-      puts "register method #{method_name}"
+
       define_method method_name.to_s do
         raise InterfaceRegistry::InterfaceNotImplementedError.new("#{self.class.name} needs to implement '#{method_name}' for interface")
       end
+      Registry.add_interface_method(self, method_name)
     end
 
     def interface_name

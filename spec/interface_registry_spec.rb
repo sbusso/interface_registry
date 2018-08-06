@@ -4,11 +4,14 @@ RSpec.describe InterfaceRegistry do
   end
 
   context "Implement TestInterface" do
+
     module TestInterface
+      extend InterfaceRegistry::AbstractInterface
+
       module SubModuleInterface
         extend InterfaceRegistry::AbstractInterface
       end
-      extend InterfaceRegistry::AbstractInterface
+
       method_interface :method1
       method_interface :method2
     end
@@ -16,6 +19,9 @@ RSpec.describe InterfaceRegistry do
     require 'test_interface/adapter_1'
     require 'test_interface/adapter_2' # test adapter without aattr accessor to register
 
+    module TestInterface2
+      extend InterfaceRegistry::AbstractInterface
+    end
     # Created Registry
     # ================
     #
@@ -36,19 +42,19 @@ RSpec.describe InterfaceRegistry do
     # }
 
     it "should provide an array of adapters" do
-      expect(InterfaceRegistry::Registry::INTERFACES).to be_a(Hash)
+      expect(InterfaceRegistry::Registry.interfaces).to be_a(Hash)
     end
 
-    it "should have registered 2 interfaces" do
-      expect(InterfaceRegistry::Registry::INTERFACES.keys.count).to be(2)
+    it "should have registered 3 interfaces" do
+      expect(InterfaceRegistry::Registry.interfaces.keys.count).to be(3)
     end
 
     it "should have registered TestInterface::SubModuleInterface" do
-      expect(InterfaceRegistry::Registry::INTERFACES).to include('TestInterface::SubModuleInterface')
+      expect(InterfaceRegistry::Registry.interfaces).to include('test_interface/sub_module_interface')
     end
 
     it "should have registered 2 adatpers for TestInterface" do
-      expect(InterfaceRegistry::Registry.adapters('TestInterface').size).to be(2)
+      expect(InterfaceRegistry::Registry.adapters(TestInterface).size).to be(2)
     end
 
     it "should have registered 2 adatpers" do
@@ -60,15 +66,11 @@ RSpec.describe InterfaceRegistry do
     end
 
     it "should have registered 2 methods" do
-      expect(InterfaceRegistry::Registry.methods('TestInterface').size).to be(2)
-    end
-
-    it "should find 2 methods for TestInterface" do
-      expect(InterfaceRegistry::Registry::INTERFACES['TestInterface'][:methods].size).to be(2)
+      expect(InterfaceRegistry::Registry.methods(TestInterface).size).to be(2)
     end
 
     it "should find 2 attribute accessors" do
-      expect(InterfaceRegistry::Registry::INTERFACES['TestInterface'][:adapters]["Adapter1"].size).to be(2)
+      expect(InterfaceRegistry::Registry.interfaces['test_interface'][:adapters]["test_interface/adapter1"].size).to be(2)
     end
 
     it "implementing a method should not raise an error" do
