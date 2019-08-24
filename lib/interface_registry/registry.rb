@@ -46,7 +46,6 @@ module InterfaceRegistry
         mod_hash[:adapters] ? mod_hash[:adapters].keys : []
       end
 
-      ##
       # Registered hooks
       def hooks
         return @hooks if @hooks

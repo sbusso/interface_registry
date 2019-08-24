@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module InterfaceRegistry
   class Error < NoMethodError; end
   class NoInterface < Error; end

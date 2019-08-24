@@ -18,7 +18,8 @@ RSpec.describe InterfaceRegistry do
     end
 
     require 'test_interface/adapter_1'
-    require 'test_interface/adapter_2' # test adapter without aattr accessor to register
+    # test adapter without aattr accessor to register
+    require 'test_interface/adapter_2'
 
     module TestInterface2
       extend InterfaceRegistry::AbstractInterface

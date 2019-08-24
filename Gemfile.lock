@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    interface_registry (0.2.0)
+    interface_registry (0.3.0)
 
 GEM
   remote: https://rubygems.org/
@@ -32,4 +32,4 @@ DEPENDENCIES
   rspec (~> 3.0)
 
 BUNDLED WITH
-   1.16.3
+   1.17.2
