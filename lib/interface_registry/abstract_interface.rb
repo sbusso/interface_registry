@@ -1,6 +1,10 @@
+# frozen_string_literal: true
+
 require 'interface_registry/utils'
 
+# An abstract interface for Registry
 module InterfaceRegistry
+  # Abstract adapter
   module AbstractInterface
     extend self
 
@@ -8,6 +12,11 @@ module InterfaceRegistry
 
     def extended(mod)
       Registry.add_interface(mod)
+      define_extended(mod)
+      define_included(mod)
+    end
+
+    def define_extended(mod)
       mod.define_singleton_method('extended') do |base|
         Registry.add_interface_adapter(mod, base)
         base.define_singleton_method('aattr_accessor') do |name|
@@ -15,6 +24,9 @@ module InterfaceRegistry
           Registry::INTERFACES[m][:adapters][name_to_key(base)] << name
         end
       end
+    end
+
+    def define_included(mod)
       mod.define_singleton_method('included') do |base|
         Registry.add_interface_adapter(mod, base)
         base.define_singleton_method('aattr_accessor') do |name|
@@ -24,15 +36,18 @@ module InterfaceRegistry
       end
     end
 
-    def adapter # adapter # factory
+    # Adapter factory
+    def adapter
       return @adapter if @adapter
+
       raise NoInterface
     end
 
     def method_interface(method_name)
-
       define_method method_name.to_s do
-        raise InterfaceRegistry::InterfaceNotImplementedError.new("#{self.class.name} needs to implement '#{method_name}' for interface")
+        raise \
+          InterfaceRegistry::InterfaceNotImplementedError,
+          "#{self.class.name} needs to implement '#{method_name}' for interface"
       end
       Registry.add_interface_method(self, method_name)
     end
@@ -46,7 +61,7 @@ module InterfaceRegistry
     end
 
     def path
-      self.name.underscore
+      name.underscore
     end
 
     def new(adapter_name, config = {})
@@ -57,19 +72,18 @@ module InterfaceRegistry
       #     raise MissingInterface
       #   end
 
-        @adapter = self.const_get("#{adapter_name.camelize}")
-        @adapter_instance = @adapter.new(config)
+      @adapter = const_get(adapter_name.camelize.to_s)
+      @adapter_instance = @adapter.new(config)
       # end
       # @adapter_instance
     end
 
     def methods
-      Registry::INTERFACES[name_to_key(self)][:methods]
+      Registry.interfaces[name_to_key(self)][:methods]
     end
 
     def adapters
-      Registry::INTERFACES[name_to_key(self)][:adapters].keys
+      Registry.interfaces[name_to_key(self)][:adapters].keys
     end
-
   end
 end

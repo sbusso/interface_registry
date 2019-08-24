@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 RSpec.describe InterfaceRegistry do
-  it "has a version number" do
+  it 'has a version number' do
     expect(InterfaceRegistry::VERSION).not_to be nil
   end
 
-  context "Implement TestInterface" do
-
+  context 'Implement TestInterface' do
     module TestInterface
       extend InterfaceRegistry::AbstractInterface
 
@@ -41,53 +42,52 @@ RSpec.describe InterfaceRegistry do
     #   }
     # }
 
-    it "should provide an array of adapters" do
+    it 'should provide an array of adapters' do
       expect(InterfaceRegistry::Registry.interfaces).to be_a(Hash)
     end
 
-    it "should have registered 3 interfaces" do
+    it 'should have registered 3 interfaces' do
       expect(InterfaceRegistry::Registry.interfaces.keys.count).to be(3)
     end
 
-    it "should have registered TestInterface::SubModuleInterface" do
+    it 'should have registered TestInterface::SubModuleInterface' do
       expect(InterfaceRegistry::Registry.interfaces).to include('test_interface/sub_module_interface')
     end
 
-    it "should have registered 2 adatpers for TestInterface" do
+    it 'should have registered 2 adatpers for TestInterface' do
       expect(InterfaceRegistry::Registry.adapters(TestInterface).size).to be(2)
     end
 
-    it "should have registered 2 adatpers" do
+    it 'should have registered 2 adatpers' do
       expect(TestInterface.adapters.size).to be(2)
     end
 
-    it "should have registered 2 methods" do
+    it 'should have registered 2 methods' do
       expect(TestInterface.methods.size).to be(2)
     end
 
-    it "should have registered 2 methods" do
+    it 'should have registered 2 methods' do
       expect(InterfaceRegistry::Registry.methods(TestInterface).size).to be(2)
     end
 
-    it "should find 2 attribute accessors" do
-      expect(InterfaceRegistry::Registry.interfaces['test_interface'][:adapters]["test_interface/adapter1"].size).to be(2)
+    it 'should find 2 attribute accessors' do
+      expect(InterfaceRegistry::Registry.interfaces['test_interface'][:adapters]['test_interface/adapter1'].size).to be(2)
     end
 
-    it "implementing a method should not raise an error" do
-      expect {
+    it 'implementing a method should not raise an error' do
+      expect do
         TestInterface::Adapter1.new.method1
-      }.to_not raise_error
+      end.to_not raise_error
     end
 
-    it "not implementing a method should raise an error" do
-      expect {
+    it 'not implementing a method should raise an error' do
+      expect do
         TestInterface::Adapter1.new.method2
-      }.to raise_error(InterfaceRegistry::InterfaceNotImplementedError)
+      end.to raise_error(InterfaceRegistry::InterfaceNotImplementedError)
     end
 
-    it "#new should create a new instance of Adapter1" do
+    it '#new should create a new instance of Adapter1' do
       expect(TestInterface.new('test_interface/adapter1')).to be_kind_of(TestInterface::Adapter1)
     end
-
   end
 end

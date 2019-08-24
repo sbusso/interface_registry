@@ -1,11 +1,14 @@
+# frozen_string_literal: true
+
+# Registratry Implementation
 module InterfaceRegistry
+  # Registry module
   module Registry
-    INTERFACES = {}
+    @_interfaces = {}
 
     class << self
-
       def add_interface(interface)
-        interfaces[name_to_key(interface)] = {methods: [], adapters: {}}
+        interfaces[name_to_key(interface)] = { methods: [], adapters: {} }
       end
 
       def add_interface_method(interface, method_name)
@@ -22,7 +25,7 @@ module InterfaceRegistry
 
       # Registered Interfaces
       def interfaces
-        INTERFACES
+        @_interfaces
         # return @_interfaces if @_interfaces
         # @_interfaces = {}
         # InterfaceRegistry::Registry::INTERFACES.keys.each do |key|
@@ -34,7 +37,7 @@ module InterfaceRegistry
       # Return registered adapters for an Interface
       def methods(interface)
         mod_hash = interfaces[name_to_key(interface)] || {}
-        mod_hash[:methods] ? mod_hash[:methods] : []
+        mod_hash[:methods] || []
       end
 
       # Return registered adapters for an Interface
@@ -47,6 +50,7 @@ module InterfaceRegistry
       # Registered hooks
       def hooks
         return @hooks if @hooks
+
         @hooks = {}
         interfaces.keys.each do |key|
           interfaces[key][:methods].each do |i|
@@ -54,7 +58,7 @@ module InterfaceRegistry
             @hooks[i] << key
           end
         end
-        return @hooks.freeze
+        @hooks.freeze
       end
 
       def name_to_key(klass)
